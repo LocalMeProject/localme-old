@@ -40,7 +40,7 @@ async function seed(
 }
 
 // Skipped automatically when DATABASE_URL is absent (local dev), and runs in
-// the CI postgres-integration job after `bun run db:migrate`.
+// the CI postgres-integration job after `npm run db:migrate`.
 const suite = hasPostgres ? describe : describe.skip;
 
 suite("document store (postgres)", () => {

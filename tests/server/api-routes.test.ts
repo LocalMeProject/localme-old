@@ -34,6 +34,8 @@ import {
   storageStatus,
   storageUpload,
 } from "@/lib/server/storage-routes";
+import { DELETE as storageRouteDelete, POST as storageRoutePost } from "@/app/api/storage/delete/route";
+import { DELETE as libRouteDelete, POST as libRoutePost } from "@/app/api/lib/delete/route";
 import {
   secretsDelete,
   secretsGet,
@@ -307,6 +309,82 @@ describe("storage endpoints", () => {
     const paths = ((await after.json()) as { data: Array<{ path: string }> }).data.map((f) => f.path);
     expect(paths.some((p) => p.startsWith("bundle/"))).toBe(false);
     expect(paths).toContain("bundled.js");
+  });
+
+  it("exports both DELETE and POST from route handlers", () => {
+    expect(typeof storageRouteDelete).toBe("function");
+    expect(typeof storageRoutePost).toBe("function");
+    expect(typeof libRouteDelete).toBe("function");
+    expect(typeof libRoutePost).toBe("function");
+  });
+
+  it("deletes files using HTTP DELETE verb and supports bulk deletion in a single request", async () => {
+    for (const p of ["bulk/f1.txt", "bulk/f2.txt", "bulk/f3.txt"]) {
+      await storageUpload(
+        new Request(`https://app.test/api/storage/upload?projectId=${project.id}&path=${p}`, {
+          method: "POST",
+          headers: authHeaders(),
+          body: `content-${p}`,
+        }),
+        { params: Promise.resolve({}) },
+      );
+    }
+
+    // Single deletion using DELETE verb
+    const singleDelete = await storageDelete(
+      new Request(`https://app.test/api/storage/delete?projectId=${project.id}&path=bulk/f1.txt`, {
+        method: "DELETE",
+        headers: authHeaders(),
+      }),
+      { params: Promise.resolve({}) },
+    );
+    expect(singleDelete.status).toBe(200);
+    expect(((await singleDelete.json()) as { deleted: number }).deleted).toBe(1);
+
+    // Bulk deletion using DELETE verb with JSON body { paths: [...] } in a single request
+    const bulkDelete = await storageDelete(
+      new Request(`https://app.test/api/storage/delete?projectId=${project.id}`, {
+        method: "DELETE",
+        headers: { ...authHeaders(), "content-type": "application/json" },
+        body: JSON.stringify({ paths: ["bulk/f2.txt", "bulk/f3.txt"] }),
+      }),
+      { params: Promise.resolve({}) },
+    );
+    expect(bulkDelete.status).toBe(200);
+    const bulkJson = (await bulkDelete.json()) as { success: boolean; deleted: number; count: number };
+    expect(bulkJson.success).toBe(true);
+    expect(bulkJson.deleted).toBe(2);
+
+    // Verify all are removed
+    const list = await storageList(get(`/api/storage/list?projectId=${project.id}&path=bulk`, authHeaders()), {
+      params: Promise.resolve({}),
+    });
+    const remaining = ((await list.json()) as { data: Array<{ path: string }> }).data.map((f) => f.path);
+    expect(remaining).not.toContain("bulk/f1.txt");
+    expect(remaining).not.toContain("bulk/f2.txt");
+    expect(remaining).not.toContain("bulk/f3.txt");
+  });
+
+  it("supports bulk deletion via query parameter ?paths=...", async () => {
+    for (const p of ["bulk2/a.txt", "bulk2/b.txt"]) {
+      await storageUpload(
+        new Request(`https://app.test/api/storage/upload?projectId=${project.id}&path=${p}`, {
+          method: "POST",
+          headers: authHeaders(),
+          body: "hi",
+        }),
+        { params: Promise.resolve({}) },
+      );
+    }
+    const bulkParam = await storageDelete(
+      new Request(`https://app.test/api/storage/delete?projectId=${project.id}&paths=bulk2/a.txt,bulk2/b.txt`, {
+        method: "DELETE",
+        headers: authHeaders(),
+      }),
+      { params: Promise.resolve({}) },
+    );
+    expect(bulkParam.status).toBe(200);
+    expect(((await bulkParam.json()) as { deleted: number }).deleted).toBe(2);
   });
 });
 

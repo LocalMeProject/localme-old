@@ -25,10 +25,10 @@ The repository mandates strict testing and Continuous Integration (CI) practices
 - **Dialect Contract (`tests/db/document-store.contract.ts`):** This is a shared test suite that is executed against *both* the SQLite in-memory database and a live Postgres database. This guarantees that neither SQL dialect diverges in behavior.
 
 ## Scripts
-- `bun run test` - Runs the full suite against the default in-memory SQLite database.
-- `bun run test:postgres` - Runs the dialect contract against Postgres (requires `DATABASE_URL`).
-- `bun run typecheck` - Runs `tsc --noEmit`.
-- `bun run lint` - Runs ESLint.
+- `npm test` - Runs the full suite against the default in-memory SQLite database.
+- `npm run test:postgres` - Runs the dialect contract against Postgres (requires `DATABASE_URL`).
+- `npm run typecheck` - Runs `tsc --noEmit`.
+- `npm run lint` - Runs ESLint.
 
 ## CI Workflow
 `.github/workflows/ci.yml` runs all the above scripts on every Pull Request and push to `main`. The codebase must be kept deployable at all times.

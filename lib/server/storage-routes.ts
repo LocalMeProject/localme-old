@@ -247,14 +247,62 @@ export const storageDelete = handler(async (request: Request) => {
   const url = new URL(request.url);
   const library = url.searchParams.get("lib") === "1";
   const project = await scopedProject(request, library ? "lib_write" : "storage_write", library);
-  const path = sanitizeRelativePath(url.searchParams.get("path") ?? "");
   const userId = project.userId;
-  // ?prefix=1 turns a directory row from the §13.2 listing into "delete
-  // everything under here", which is what a file manager's folder trash does.
-  const prefix = url.searchParams.get("prefix") === "1";
-  const deleted = await deleteFile(userId, project.id, path, { prefix });
-  if (deleted === 0) throw new ApiError("not_found", "File not found.");
-  return apiOk({ success: true, deleted });
+
+  let paths: string[] = [];
+  let prefix = url.searchParams.get("prefix") === "1";
+
+  // Check if request body contains paths (bulk delete) or path
+  const contentType = request.headers.get("content-type") ?? "";
+  if (contentType.includes("application/json")) {
+    try {
+      const body = (await request.json()) as { paths?: unknown; path?: unknown; prefix?: boolean } | null;
+      if (body && typeof body === "object") {
+        if (Array.isArray(body.paths)) {
+          paths = body.paths.map((p) => sanitizeRelativePath(String(p))).filter(Boolean);
+        } else if (typeof body.path === "string") {
+          paths = [sanitizeRelativePath(body.path)];
+          if (body.prefix !== undefined) prefix = Boolean(body.prefix);
+        }
+      }
+    } catch {
+      // Body empty or invalid JSON, fall through to query parameters
+    }
+  }
+
+  // Fallback to URL search parameters
+  if (paths.length === 0) {
+    const rawPaths = url.searchParams.getAll("paths");
+    if (rawPaths.length > 0) {
+      paths = rawPaths.flatMap((p) => p.split(",")).map(sanitizeRelativePath).filter(Boolean);
+    } else {
+      const allPathParams = url.searchParams.getAll("path");
+      if (allPathParams.length > 1) {
+        paths = allPathParams.map(sanitizeRelativePath).filter(Boolean);
+      } else if (allPathParams.length === 1 && allPathParams[0] !== "") {
+        paths = [sanitizeRelativePath(allPathParams[0])];
+      }
+    }
+  }
+
+  if (paths.length === 0) {
+    throw new ApiError("bad_request", "Missing file path to delete.");
+  }
+
+  if (paths.length === 1) {
+    // ?prefix=1 turns a directory row from the §13.2 listing into "delete
+    // everything under here", which is what a file manager's folder trash does.
+    const deleted = await deleteFile(userId, project.id, paths[0], { prefix });
+    if (deleted === 0) throw new ApiError("not_found", "File not found.");
+    return apiOk({ success: true, deleted, count: deleted });
+  }
+
+  // Bulk remove multiple paths in a single request
+  let totalDeleted = 0;
+  for (const p of paths) {
+    totalDeleted += await deleteFile(userId, project.id, p);
+  }
+  return apiOk({ success: true, deleted: totalDeleted, count: totalDeleted });
 });
 
 const moveSchema = z.object({

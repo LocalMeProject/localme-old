@@ -114,7 +114,7 @@ const CONSOLE: Endpoint[] = [
 ];
 
 const MCP_ENDPOINTS: Endpoint[] = [
-  { method: "POST", path: "/api/mcp", auth: "docs.auth.legend.sessionOrKey", note: "docs.note.mcp.rpc" },
+  { method: "POST", path: "/api/projects/deploy", auth: "docs.auth.legend.sessionOrKey", note: "docs.note.mcp.rpc" },
   { method: "POST", path: "/api/agent/request-aat", auth: "docs.auth.legend.public", note: "docs.note.agent.request" },
   { method: "GET", path: "/api/agent/poll-aat?requestId=…", auth: "docs.auth.legend.public", note: "docs.note.agent.poll" },
   { method: "POST", path: "/api/agent/check", auth: "docs.auth.legend.public", note: "docs.note.agent.check" },

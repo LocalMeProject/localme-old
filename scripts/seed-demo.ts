@@ -1,8 +1,8 @@
 /**
  * Populate a development database with demo accounts and projects.
  *
- *   bun run seed              # idempotent; existing accounts are skipped
- *   bun run seed -- --reset   # delete the demo accounts first, then recreate
+ *   npm run seed              # idempotent; existing accounts are skipped
+ *   npm run seed -- --reset   # delete the demo accounts first, then recreate
  *
  * The seeder itself lives in `lib/server/seed-demo.ts` so the same code path is
  * exercised by tests and by anything else that needs a populated fixture.

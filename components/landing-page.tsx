@@ -785,7 +785,7 @@ export function LandingPage() {
                   <span>Agent Skill: <code className="text-signal font-mono">https://localme.ir/skills/localme/SKILL.md</code></span>
                 </div>
                 <div>
-                  <span>MCP Server: <code className="text-blueprint font-mono">https://localme.ir/api/mcp</code></span>
+                  <span>ZIP Bundle: <code className="text-blueprint font-mono">localme.json + codebase/</code></span>
                 </div>
               </div>
             </div>

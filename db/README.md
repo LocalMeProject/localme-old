@@ -37,7 +37,7 @@ In-memory keeps test suites isolated and dependency-free; file paths ensure data
 ## Applying
 
 ```bash
-bun run db:migrate                     # auto-detects the driver (sqlite by default)
-DB_DRIVER=postgres bun run db:migrate  # Postgres via DATABASE_URL
+npm run db:migrate                     # auto-detects the driver (sqlite by default)
+DB_DRIVER=postgres npm run db:migrate  # Postgres via DATABASE_URL
 ```
 In container environments, `npm run runflare:start` runs `scripts/migrate.mjs` automatically before binding the port.

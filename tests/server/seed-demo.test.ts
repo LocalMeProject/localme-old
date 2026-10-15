@@ -1,5 +1,5 @@
 /**
- * The demo seeder is shipped behaviour (`bun run seed`), so it is held to the
+ * The demo seeder is shipped behaviour (`npm run seed`), so it is held to the
  * same standard as anything else: idempotent, dialect-agnostic, and honest
  * about what it skipped.
  *

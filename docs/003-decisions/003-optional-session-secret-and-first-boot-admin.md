@@ -75,8 +75,8 @@ reading password hashes, and strictly better than an empty HMAC key.
 
 **Why not simply refuse to start.** That is the correct posture for a security
 control that cannot degrade safely, but `SESSION_SECRET` is doing double duty as
-a *convenience* for local development, and a refusal makes `git clone && bun
-install && bun run dev` fail. The cost of a missing secret is now a warning
+a *convenience* for local development, and a refusal makes `git clone && npm
+install && npm run dev` fail. The cost of a missing secret is now a warning
 rather than a crash, and production gets the loud version of that warning.
 
 ### 2. Bootstrap one administrator, once
@@ -105,8 +105,8 @@ first boot happened.
 
 **Positive**
 
-- A clean checkout runs with no configuration at all; `git clone && bun install &&
-  bun run dev` works.
+- A clean checkout runs with no configuration at all; `git clone && npm install &&
+  npm run dev` works.
 - The session-forgery hole from the empty HMAC fallback is closed regardless of
   configuration.
 - A fresh production deployment is reachable by signing in, not by editing a

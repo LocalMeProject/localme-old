@@ -27,8 +27,8 @@ function mac(payload: string): string {
  */
 export function createCaptchaChallenge(): CaptchaChallenge {
   const expires = Date.now() + CHALLENGE_TTL_MS;
-  const a = randomInt(15, 50);
-  const b = randomInt(10, 49);
+  const a = randomInt(1, 10);
+  const b = randomInt(1, 10);
   const answer = a + b;
   const payload = `${expires}.${answer}`;
   const id = `${payload}.${mac(payload)}`;

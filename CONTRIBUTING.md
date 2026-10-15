@@ -3,36 +3,36 @@
 ## Getting set up
 
 ```bash
-bun install
-bun run db:migrate        # SQLite by default; no database service needed
-bun run seed              # optional: demo accounts and projects
-bun run dev
+npm install
+npm run db:migrate        # SQLite by default; no database service needed
+npm run seed              # optional: demo accounts and projects
+npm run dev
 ```
 
 Copy `env.example` to `.env.local` and set `SESSION_SECRET` (generate one with
 `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`).
-`bun run dev` binds `0.0.0.0:$PORT`.
+`npm run dev` binds `0.0.0.0:$PORT`.
 
 The default database is in-memory, so it starts empty and disappears on restart. Set
 `DB_PATH` to an absolute `file:/…` path for a database that survives, then
-`bun run db:migrate && bun run seed` gives you a console with data in it.
+`npm run db:migrate && npm run seed` gives you a console with data in it.
 
 ## The four gates
 
 CI runs these on every push and every pull request. All four must pass.
 
 ```bash
-bun run typecheck     # tsc --noEmit, strict
-bun run lint          # eslint 9 flat config
-bun run test          # vitest on SQLite
-bun run build         # next build
+npm run typecheck     # tsc --noEmit, strict
+npm run lint          # eslint 9 flat config
+npm test              # vitest on SQLite
+npm run build         # next build
 ```
 
-There is a fifth leg, `bun run test:postgres`, which needs a real server:
+There is a fifth leg, `npm run test:postgres`, which needs a real server:
 
 ```bash
-DB_DRIVER=postgres DATABASE_URL=postgresql://user:pass@localhost:5432/localme bun run db:migrate
-DB_DRIVER=postgres DATABASE_URL=postgresql://user:pass@localhost:5432/localme bun run test:postgres
+DB_DRIVER=postgres DATABASE_URL=postgresql://user:pass@localhost:5432/localme npm run db:migrate
+DB_DRIVER=postgres DATABASE_URL=postgresql://user:pass@localhost:5432/localme npm run test:postgres
 ```
 
 **The two dialects cannot drift.** Any change to the document store, the DSL
@@ -92,7 +92,7 @@ A change that only passes one dialect is a bug, not a platform limitation.
 
 ## Before you open a pull request
 
-- `bun run typecheck && bun run lint && bun run test && bun run build` is green.
+- `npm run typecheck && npm run lint && npm test && npm run build` is green.
 - New behaviour has a test that fails without it.
 - Public docs (`README.md`, `app/docs/page.tsx`, `env.example`) match what the
   code actually does — defaults included.

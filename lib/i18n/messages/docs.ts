@@ -27,7 +27,7 @@ export const docs = {
   "docs.nav.operations": { "en-US": "Certificates & operations", "fa-IR": "گواهی‌ها و عملیات" },
   "docs.nav.console": { "en-US": "Console API", "fa-IR": "API کنسول" },
   "docs.nav.limits": { "en-US": "Limits & quotas", "fa-IR": "محدودیت‌ها و سهمیه‌ها" },
-  "docs.nav.mcp": { "en-US": "AI Agents & MCP", "fa-IR": "عامل‌های هوش مصنوعی و MCP" },
+  "docs.nav.mcp": { "en-US": "AI Agents & Deploy", "fa-IR": "عامل‌های هوش مصنوعی و انتشار" },
   "docs.nav.errors": { "en-US": "Errors", "fa-IR": "خطاها" },
 
   // -------------------------------------------------------------- header
@@ -276,9 +276,9 @@ export const docs = {
   "docs.operations.backupsTitle": { "en-US": "Backups", "fa-IR": "پشتیبان‌ها" },
   "docs.operations.backupsBody": {
     "en-US":
-      "‹bun run backup› takes a consistent snapshot — ‹pg_dump› for the Postgres dialect, a ‹VACUUM INTO› snapshot for SQLite — and prunes anything past the retention window. Add ‹--list› to see what is on disk, ‹--verify <file>› to check an archive before you trust it, and ‹--restore <file>› to load one back. The connection string is read from the environment, never from the command line.",
+      "‹npm run backup› takes a consistent snapshot — ‹pg_dump› for the Postgres dialect, a ‹VACUUM INTO› snapshot for SQLite — and prunes anything past the retention window. Add ‹--list› to see what is on disk, ‹--verify <file>› to check an archive before you trust it, and ‹--restore <file>› to load one back. The connection string is read from the environment, never from the command line.",
     "fa-IR":
-      "‹bun run backup› یک عکس لحظه‌ای سازگار میگیرد — ‹pg_dump› برای گویش Postgres و ‹VACUUM INTO› برای SQLite — و هر چیزی فراتر از پنجرهٔ نگهداری را هرس میکند. ‹--list› را اضافه کن تا ببینی روی دیسک چیست، ‹--verify <file>› تا پیش از اعتماد یک آرشیو را بررسی کنی، و ‹--restore <file>› تا یکی را برگردانی. رشتهٔ اتصال از محیط خوانده میشود، هرگز از خط فرمان.",
+      "‹npm run backup› یک عکس لحظه‌ای سازگار میگیرد — ‹pg_dump› برای گویش Postgres و ‹VACUUM INTO› برای SQLite — و هر چیزی فراتر از پنجرهٔ نگهداری را هرس میکند. ‹--list› را اضافه کن تا ببینی روی دیسک چیست، ‹--verify <file>› تا پیش از اعتماد یک آرشیو را بررسی کنی، و ‹--restore <file>› تا یکی را برگردانی. رشتهٔ اتصال از محیط خوانده میشود، هرگز از خط فرمان.",
   },
 
   // ------------------------------------------------------------- console
@@ -620,38 +620,38 @@ export const docs = {
 
   // ---------------------------------------------------------------- mcp & agents
   "docs.mcp.title": {
-    "en-US": "AI Agents, Skills & MCP Server",
-    "fa-IR": "عامل‌های هوش مصنوعی، اسکیل‌ها و سرور MCP",
+    "en-US": "AI Agents & ZIP Deployment",
+    "fa-IR": "عامل‌های هوش مصنوعی و انتشار با ZIP",
   },
   "docs.mcp.body": {
     "en-US":
-      "LocalMe provides first-class support for autonomous AI coding agents (Claude Code, Cursor, Antigravity, Windsurf, etc.). Connect your agent to the native MCP server at ‹https://localme.ir/api/mcp› or provide the official Agent Skill at ‹https://localme.ir/skills/localme/SKILL.md›. Agents can autonomously create projects, upload assets, provision databases, and configure routing with Human-in-the-Loop approval for tokens.",
+      "LocalMe is built so you can chat with any AI model (ChatGPT, Claude, Cursor, Antigravity, etc.) to design and build your web app. Point your AI to the LocalMe Skill at ‹https://localme.ir/skills/localme/SKILL.md›. The AI generates your frontend files and packages them into a standard ZIP bundle containing ‹localme.json› at the root and a ‹codebase/› directory. Upload the ZIP via the dashboard or ‹POST /api/projects/deploy› for instant live deployment.",
     "fa-IR":
-      "لوکال می پشتیبانی کامل و بومی از عامل‌های خودکار هوش مصنوعی (کلود، کرسر، آنتی‌گرویتی، ویندسرف و غیره) ارائه میدهد. عامل خود را به سرور MCP به نشانی ‹https://localme.ir/api/mcp› متصل کنید یا فایل اسکیل رسمی را در ‹https://localme.ir/skills/localme/SKILL.md› به آن بدهید. عامل‌ها میتوانند به صورت خودکار پروژه بسازند، فایل‌ها را بارگذاری کنند، دیتابیس را آماده کنند و مسیرها را تنظیم نمایند، در حالی که تایید صدور توکن همواره با تایید انسانی انجام میشود.",
+      "لوکال می به گونه‌ای طراحی شده که بتوانید با هر مدل هوش مصنوعی (چت‌جی‌پی‌تی، کلود، کرسر، آنتی‌گرویتی و غیره) برنامه وب خود را بسازید. کافیست نشانی اسکیل لوکال می در ‹https://localme.ir/skills/localme/SKILL.md› را به مدل معرفی کنید. هوش مصنوعی فایل‌های فرانت‌اند شما را میسازد و در قالب یک بسته ZIP استاندارد شامل فایل ‹localme.json› در ریشه و پوشه ‹codebase/› بسته‌بندی میکند. این فایل را از داشبورد یا ‹POST /api/projects/deploy› بارگذاری کنید تا فورا آنلاین شود.",
   },
   "docs.mcp.aatTitle": {
-    "en-US": "Agent Access Tokens (AAT) & Human Consent Flow",
-    "fa-IR": "توکن‌های دسترسی عامل (AAT) و فرآیند تایید انسانی",
+    "en-US": "ZIP Bundle Structure",
+    "fa-IR": "ساختار بسته ZIP پروژه",
   },
   "docs.mcp.aatBody": {
     "en-US":
-      "Agents request access via ‹POST /api/agent/request-aat›. The user receives a consent link ‹/auth/consent?requestId=…› to approve in their browser. Once approved, the agent polls ‹/api/agent/poll-aat›, caches the ephemeral token in ‹localme-aat.txt›, and operates via MCP tools. Permanent or auto-rotating Personal Access Tokens (PAT) can also be created manually via ‹/account›.",
+      "At the root of the ZIP file: ‹localme.json› contains all platform configurations (routing, roles, secrets, automations, and settings), while the ‹codebase/› folder contains your static web files (‹index.html›, CSS, JS, images). In ‹localme.json›, every field is optional — omitted fields use safe defaults.",
     "fa-IR":
-      "عامل‌ها با ‹POST /api/agent/request-aat› درخواست دسترسی میدهند. لینک تایید ‹/auth/consent?requestId=…› برای کاربر نمایش داده میشود تا در مرورگر تایید کند. پس از تایید، عامل با فراخوانی ‹/api/agent/poll-aat› توکن موقت را دریافت کرده، در ‹localme-aat.txt› ذخیره میکند و با ابزارهای MCP کار میکند. همچنین توکن‌های دسترسی شخصی (PAT) دائمی یا با چرخش خودکار از طریق ‹/account› قابل ایجاد هستند.",
+      "در ریشه فایل ZIP: فایل ‹localme.json› شامل تمام تنظیمات پلتفرم (مسیرها، نقش‌ها، متغیرهای محرمانه، خودکارسازی و تنظیمات) است و پوشه ‹codebase/› فایل‌های وب استاتیک شما (‹index.html›، استایل‌ها، اسکریپت‌ها و تصاویر) را نگه میدارد. در ‹localme.json› تمام فیلدها اختیاری هستند و فیلدهای خالی مقدار پیش‌فرض میگیرند.",
   },
   "docs.mcp.toolsTitle": {
-    "en-US": "Available MCP Tools",
-    "fa-IR": "ابزارهای در دسترس در MCP",
+    "en-US": "Deploying via API & Dashboard",
+    "fa-IR": "روش‌های انتشار از داشبورد و API",
   },
   "docs.mcp.toolsBody": {
     "en-US":
-      "The MCP server exposes 12 autonomous tools: ‹localme_list_projects›, ‹localme_get_project›, ‹localme_create_project›, ‹localme_list_files›, ‹localme_read_file›, ‹localme_upload_file›, ‹localme_delete_file›, ‹localme_db_find›, ‹localme_db_insert›, ‹localme_db_update›, ‹localme_db_delete›, and ‹localme_get_usage›.",
+      "You can deploy your ZIP bundle directly from the LocalMe dashboard under New Project or Project Overview, or script deployments via ‹POST /api/projects/deploy› (multipart/form-data with ‹file›).",
     "fa-IR":
-      "سرور MCP دوازده ابزار خودکار در اختیار عامل میگذارد: ‹localme_list_projects›، ‹localme_get_project›، ‹localme_create_project›، ‹localme_list_files›، ‹localme_read_file›، ‹localme_upload_file›، ‹localme_delete_file›، ‹localme_db_find›، ‹localme_db_insert›، ‹localme_db_update›، ‹localme_db_delete› و ‹localme_get_usage›.",
+      "میتوانید بسته ZIP خود را مستقیما از طریق پیشخوان لوکال می در بخش ساخت پروژه یا نمای کلی پروژه بارگذاری کنید، یا از طریق ‹POST /api/projects/deploy› (فرم چندبخشی با فیلد ‹file›) منتشر نمایید.",
   },
   "docs.note.mcp.rpc": {
-    "en-US": "JSON-RPC 2.0 / SSE endpoint for Model Context Protocol agents.",
-    "fa-IR": "نقطه پایانی JSON-RPC 2.0 / SSE برای عامل‌های پروتکل زمینه مدل (MCP).",
+    "en-US": "Deploy or create a project from a standard LocalMe ZIP bundle.",
+    "fa-IR": "انتشار یا ساخت پروژه از طریق بسته استاندارد ZIP لوکال می.",
   },
   "docs.note.agent.request": {
     "en-US": "Requests a new ephemeral Agent Access Token (AAT); returns a consent URL.",

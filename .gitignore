@@ -1,6 +1,5 @@
 # dependencies
 node_modules/
-.bun/
 
 # next.js build output
 .next/
@@ -15,11 +14,13 @@ build/
 # local backend state (legacy Convex; kept for safety)
 .convex/
 
-# sqlite data files
+# sqlite and storage data files
 *.db
 *.db-wal
 *.db-shm
 local.db*
+data/
+storage_data/
 
 # env & secrets
 .env

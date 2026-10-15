@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, FileCode2, Save } from "lucide-react";
+import { AlignLeft, AlignRight, Check, FileCode2, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/lib/i18n/client";
@@ -27,6 +27,8 @@ export function CodeEditor({
   const areaRef = useRef<HTMLTextAreaElement>(null);
   const { t } = useI18n();
   const [cursor, setCursor] = useState({ line: 1, column: 1 });
+  const [overrideDirection, setOverrideDirection] = useState<{ path: string; dir: "ltr" | "rtl" } | null>(null);
+  const direction = overrideDirection?.path === path ? overrideDirection.dir : "ltr";
 
   const lineNumbers = useMemo(() => {
     const count = Math.max(value.split("\n").length, 1);
@@ -55,6 +57,31 @@ export function CodeEditor({
           {dirty && <Badge variant="warning">{t("code.unsaved")}</Badge>}
         </div>
         <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            className="h-7 px-2 font-mono text-11px gap-1.5 text-muted-foreground hover:text-foreground"
+            title={direction === "ltr" ? t("code.direction.toRtl") : t("code.direction.toLtr")}
+            onClick={() =>
+              setOverrideDirection({
+                path,
+                dir: direction === "ltr" ? "rtl" : "ltr",
+              })
+            }
+          >
+            {direction === "ltr" ? (
+              <>
+                <AlignLeft className="h-3.5 w-3.5 text-signal" />
+                <span className="font-semibold text-foreground">LTR</span>
+              </>
+            ) : (
+              <>
+                <AlignRight className="h-3.5 w-3.5 text-signal" />
+                <span className="font-semibold text-foreground">RTL</span>
+              </>
+            )}
+          </Button>
           <span className="nums hidden font-mono text-10px text-muted-foreground sm:block">
             {t("code.cursor", { line: cursor.line, column: cursor.column })}
           </span>
@@ -64,8 +91,17 @@ export function CodeEditor({
           </Button>
         </div>
       </div>
-      <div className="relative flex min-h-0 flex-1">
-        <div className="nums select-none overflow-hidden border-e border-border bg-muted/30 px-2 py-2 text-end font-mono text-11px leading-5 text-muted-foreground/70">
+      <div
+        className="relative flex min-h-0 flex-1"
+        dir={direction}
+        style={{ direction }}
+      >
+        <div
+          className={cn(
+            "nums select-none overflow-hidden bg-muted/30 px-2 py-2 font-mono text-11px leading-5 text-muted-foreground/70",
+            direction === "ltr" ? "border-r border-border text-right" : "border-l border-border text-left"
+          )}
+        >
           {lineNumbers.map((line) => (
             <div key={line}>{line}</div>
           ))}
@@ -74,6 +110,7 @@ export function CodeEditor({
           ref={areaRef}
           value={value}
           spellCheck={false}
+          dir={direction}
           onChange={(event) => {
             onChange(event.target.value);
             const upToCursor = event.target.value.slice(0, event.target.selectionStart);
@@ -85,7 +122,11 @@ export function CodeEditor({
             const lines = upToCursor.split("\n");
             setCursor({ line: lines.length, column: lines[lines.length - 1].length + 1 });
           }}
-          className="ltr-content min-h-[380px] w-full flex-1 resize-none bg-transparent px-3 py-2 text-start font-mono text-12.5px leading-5 outline-none scrollbar-thin"
+          className={cn(
+            "min-h-[380px] w-full flex-1 resize-none bg-transparent px-3 py-2 font-mono text-12.5px leading-5 outline-none scrollbar-thin",
+            direction === "ltr" ? "ltr-content text-left" : "text-right"
+          )}
+          style={{ direction, textAlign: direction === "ltr" ? "left" : "right" }}
         />
       </div>
     </div>

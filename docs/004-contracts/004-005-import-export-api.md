@@ -24,4 +24,4 @@ Endpoints for completely exporting or importing a project workspace, including c
 - `GET /api/export/all` - Exports the entire project (database, config, storage assets) as a downloadable ZIP archive or JSON payload.
 - `POST /api/import/all` - Imports a previously exported project payload, rebuilding the project's state.
 
-These endpoints ensure users have full data portability and provide an easy migration or backup mechanism at the project level, complementary to the global `bun run backup` tool.
+These endpoints ensure users have full data portability and provide an easy migration or backup mechanism at the project level, complementary to the global `npm run backup` tool.

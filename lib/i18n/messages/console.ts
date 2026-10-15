@@ -24,6 +24,27 @@ export const consoleMessages = {
   },
   "projects.create.submit": { "en-US": "Create project", "fa-IR": "ساخت پروژه" },
   "projects.create.working": { "en-US": "Creating…", "fa-IR": "در حال ساخت…" },
+  "projects.create.tabEmpty": { "en-US": "Empty project", "fa-IR": "پروژه خالی" },
+  "projects.create.tabZip": { "en-US": "Deploy ZIP", "fa-IR": "انتشار از فایل ZIP" },
+  "projects.create.zipLabel": { "en-US": "LocalMe ZIP bundle", "fa-IR": "بسته ZIP لوکال می" },
+  "projects.create.zipHint": {
+    "en-US": "Upload a ZIP file containing localme.json and codebase/ folder.",
+    "fa-IR": "یک فایل ZIP شامل localme.json و پوشه codebase/ بارگذاری کنید.",
+  },
+  "projects.create.zipSubmit": { "en-US": "Deploy project", "fa-IR": "انتشار پروژه" },
+  "projects.create.zipWorking": { "en-US": "Deploying…", "fa-IR": "در حال انتشار…" },
+  "projects.create.libraryModeLabel": {
+    "en-US": "Shared library assets",
+    "fa-IR": "فایل‌های کتابخانهٔ مشترک",
+  },
+  "projects.create.libraryModeHint": {
+    "en-US": "Choose how to handle shared library files if included in the ZIP archive.",
+    "fa-IR": "نحوهٔ اعمال فایل‌های کتابخانهٔ مشترک موجود در فایل ZIP را تعیین کنید.",
+  },
+  "projects.deploy.done": {
+    "en-US": 'Project "{name}" deployed successfully',
+    "fa-IR": "پروژهٔ «{name}» با موفقیت منتشر شد",
+  },
   "projects.create.done": {
     "en-US": 'Project "{name}" created',
     "fa-IR": "پروژهٔ «{name}» ساخته شد",

@@ -41,6 +41,13 @@ export const workspace = {
   },
   "overview.cap.title": { "en-US": "Storage cap", "fa-IR": "سقف فضای ذخیره‌سازی" },
   "overview.cap.used": { "en-US": "{used} of {total} used", "fa-IR": "{used} از {total} مصرف شده" },
+  "overview.deploy.title": { "en-US": "Deploy ZIP", "fa-IR": "انتشار با ZIP" },
+  "overview.deploy.desc": {
+    "en-US": "Upload a LocalMe ZIP bundle (localme.json + codebase/) to update this project.",
+    "fa-IR": "یک بسته ZIP لوکال می (localme.json + codebase/) برای به‌روزرسانی پروژه بارگذاری کنید.",
+  },
+  "overview.deploy.button": { "en-US": "Upload ZIP", "fa-IR": "بارگذاری ZIP" },
+  "overview.deploy.success": { "en-US": "Project updated successfully", "fa-IR": "پروژه با موفقیت به‌روزرسانی شد" },
 
   // --------------------------------------------------------------- code
   "files.title": { "en-US": "Project files", "fa-IR": "فایل‌های پروژه" },

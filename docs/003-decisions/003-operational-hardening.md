@@ -90,7 +90,7 @@ The new `renew_ssl_certificates` cron task runs every six hours but no-ops while
 
 ### 7. Backups are a CLI tool, not an endpoint (§9.3)
 
-`scripts/backup.mjs` (`bun run backup`) uses `pg_dump` for Postgres and `VACUUM INTO` (with a file
+`scripts/backup.mjs` (`npm run backup`) uses `pg_dump` for Postgres and `VACUUM INTO` (with a file
 copy fallback) for SQLite, then prunes past the retention window. It takes `--db`, `--dir`,
 `--driver`, `--retention-days`, `--list`, `--verify` and `--restore` flags rather than reading the
 environment inline, so the same snapshot runs from cron, a systemd timer or CI. The Postgres

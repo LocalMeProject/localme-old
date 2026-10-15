@@ -203,15 +203,15 @@ export function FilesTab({ projectId }: { projectId: number }) {
   async function deleteChecked(paths: string[]) {
     if (paths.length === 0) return;
     if (!window.confirm(t("files.delete.confirmCount", { count: fmt.number(paths.length) }))) return;
-    for (const path of paths) {
-      await apiDelete(`/api/storage/delete?projectId=${projectId}&path=${encodeURIComponent(path)}`).catch(
-        () => undefined,
-      );
+    try {
+      await apiDelete(`/api/storage/delete?projectId=${projectId}`, { paths });
+      toast.success(t("files.delete.doneCount", { count: fmt.number(paths.length) }));
+      if (selected && paths.includes(selected)) setSelected(null);
+      setChecked([]);
+      await load();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : t("files.delete.failed"));
     }
-    toast.success(t("files.delete.doneCount", { count: fmt.number(paths.length) }));
-    if (selected && paths.includes(selected)) setSelected(null);
-    setChecked([]);
-    await load();
   }
 
   function startRename(path: string) {

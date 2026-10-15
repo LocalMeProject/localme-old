@@ -140,6 +140,8 @@ export const importAllHandler = handler(async (request) => {
           library: true,
           destProjectId: libraryProject.id,
         }
+      : entry.path.startsWith("codebase/")
+        ? { path: entry.path.slice("codebase/".length), library: false, destProjectId: project.id }
       : entry.path.startsWith("storage/")
         ? { path: entry.path.slice("storage/".length), library: false, destProjectId: project.id }
         : null;
@@ -156,8 +158,62 @@ export const importAllHandler = handler(async (request) => {
   }
 
   let features = 0;
+  const localmeEntry = entries.find((entry) => entry.path === "localme.json" || entry.path === "/localme.json");
+  if (localmeEntry) {
+    const config = parseJsonSection<Record<string, unknown>>(localmeEntry, "localme.json");
+    if (config.routes && Array.isArray(config.routes)) {
+      try {
+        await importFeature(project.id, "routes", config.routes);
+        features += 1;
+      } catch {}
+    }
+    if (config.roles && Array.isArray(config.roles)) {
+      try {
+        await importFeature(project.id, "roles", config.roles);
+        features += 1;
+      } catch {}
+    }
+    if (config.secrets) {
+      try {
+        const secretsList = Array.isArray(config.secrets)
+          ? config.secrets
+          : Object.entries(config.secrets as Record<string, unknown>).map(([key, value]) => ({ key, value: String(value) }));
+        await importFeature(project.id, "secrets", secretsList);
+        features += 1;
+      } catch {}
+    }
+    const webhooks = (config.automations as Record<string, unknown> | undefined)?.webhooks ?? config.webhooks;
+    if (webhooks && Array.isArray(webhooks)) {
+      try {
+        await importFeature(project.id, "webhooks", webhooks);
+        features += 1;
+      } catch {}
+    }
+    const cron = (config.automations as Record<string, unknown> | undefined)?.cron ?? config.cron;
+    if (cron && Array.isArray(cron)) {
+      try {
+        await importFeature(project.id, "cron", cron);
+        features += 1;
+      } catch {}
+    }
+    const domains = config.domains ?? config.dns;
+    if (domains && Array.isArray(domains)) {
+      try {
+        await importFeature(project.id, "dns", domains);
+        features += 1;
+      } catch {}
+    }
+    const endpoints = config.endpoints ?? config.api;
+    if (endpoints && Array.isArray(endpoints)) {
+      try {
+        await importFeature(project.id, "api", endpoints);
+        features += 1;
+      } catch {}
+    }
+  }
+
   const configEntry = entries.find((entry) => entry.path === "config/config.json");
-  if (configEntry) {
+  if (configEntry && !localmeEntry) {
     const bundle = parseJsonSection<Record<string, unknown>>(configEntry, "config/config.json");
     for (const feature of EXPORT_FEATURES) {
       if (bundle[feature] === undefined) continue;
@@ -171,7 +227,7 @@ export const importAllHandler = handler(async (request) => {
   }
 
   const secretsEntry = entries.find((entry) => entry.path === "config/secrets.json");
-  if (secretsEntry) {
+  if (secretsEntry && (!localmeEntry || !(parseJsonSection<Record<string, unknown>>(localmeEntry, "localme.json")?.secrets))) {
     await importFeature(project.id, "secrets", parseJsonSection(secretsEntry, "config/secrets.json"));
   }
 

@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Activity, Globe2, HardDrive } from "lucide-react";
+import { Activity, Globe2, HardDrive, Upload } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -18,6 +21,8 @@ export function OverviewTab({ project, base }: { project: Project; base: string 
   const { t, fmt } = useI18n();
   const [storage, setStorage] = useState<{ used: number; total: number; files: number } | null>(null);
   const [visits, setVisits] = useState<number | null>(null);
+  const [deployFile, setDeployFile] = useState<File | null>(null);
+  const [deploying, setDeploying] = useState(false);
 
   useEffect(() => {
     void apiGet<{ used: number; total: number; files: number }>(`/api/storage/status?projectId=${project.id}`)
@@ -68,6 +73,59 @@ export function OverviewTab({ project, base }: { project: Project; base: string 
           </CardContent>
         </Card>
       )}
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm flex items-center justify-between">
+            <span>{t("overview.deploy.title")}</span>
+            <Upload className="h-4 w-4 text-muted-foreground" />
+          </CardTitle>
+          <CardDescription className="text-12.5px">
+            {t("overview.deploy.desc")}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (!deployFile) return;
+              setDeploying(true);
+              try {
+                const formData = new FormData();
+                formData.append("file", deployFile);
+                formData.append("projectId", String(project.id));
+                const res = await fetch("/api/projects/deploy", {
+                  method: "POST",
+                  body: formData,
+                  credentials: "include",
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || data.error || "Deployment failed");
+                toast.success(t("overview.deploy.success"));
+                setDeployFile(null);
+                void apiGet<{ used: number; total: number; files: number }>(`/api/storage/status?projectId=${project.id}`)
+                  .then(setStorage);
+              } catch (err) {
+                toast.error(err instanceof Error ? err.message : "Deployment failed");
+              } finally {
+                setDeploying(false);
+              }
+            }}
+            className="flex flex-wrap items-center gap-3"
+          >
+            <Input
+              type="file"
+              accept=".zip,application/zip"
+              onChange={(e) => setDeployFile(e.target.files?.[0] ?? null)}
+              className="w-72"
+            />
+            <Button type="submit" size="sm" variant="default" disabled={!deployFile || deploying}>
+              <Upload className="h-3.5 w-3.5 me-1.5" />
+              {deploying ? "..." : t("overview.deploy.button")}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

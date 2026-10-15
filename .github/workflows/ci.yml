@@ -25,28 +25,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          bun-version: latest
+          node-version: 22
+          cache: "npm"
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: npm ci
 
       - name: Typecheck
-        run: bun run typecheck
+        run: npm run typecheck
 
       - name: Lint
-        run: bun run lint
+        run: npm run lint
 
       - name: Test (sqlite)
-        run: bun run test
+        run: npm test
 
       - name: Test (postgres)
-        run: bun run test:postgres
+        run: npm run test:postgres
 
       - name: Build
-        run: bun run build
+        run: npm run build
 
       - name: Upload build artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -79,16 +80,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          bun-version: latest
+          node-version: 22
+          cache: "npm"
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: npm ci
 
       - name: Apply migrations (postgres)
-        run: bun run db:migrate
+        run: npm run db:migrate
 
       - name: Data-layer tests (postgres)
-        run: bun run test:postgres
+        run: npm run test:postgres

@@ -207,6 +207,8 @@ export const common = {
   // ----------------------------------------------------------- code edit
   "code.unsaved": { "en-US": "unsaved", "fa-IR": "ذخیره‌نشده" },
   "code.cursor": { "en-US": "Ln {line}, Col {column}", "fa-IR": "سطر {line}، ستون {column}" },
+  "code.direction.toRtl": { "en-US": "Switch to RTL (Right-to-Left)", "fa-IR": "تغییر جهت به راست‌به‌چپ (RTL)" },
+  "code.direction.toLtr": { "en-US": "Switch to LTR (Left-to-Right)", "fa-IR": "تغییر جهت به چپ‌به‌راست (LTR)" },
 
   // ------------------------------------------------------------ pagination
   "pagination.empty": { "en-US": "Nothing to show", "fa-IR": "چیزی برای نمایش نیست" },

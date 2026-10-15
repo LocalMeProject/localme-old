@@ -5,7 +5,7 @@ const eslintConfig = [
   ...nextCoreWebVitals,
   ...nextTypescript,
   {
-    ignores: [".next/**", "node_modules/**", "next-env.d.ts", "isolate/**", ".seed-build/**", "coverage/**"],
+    ignores: [".next/**", "node_modules/**", "next-env.d.ts", "isolate/**", ".seed-build/**", "coverage/**", "storage_data/**", "data/**"],
   },
   {
     rules: {

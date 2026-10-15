@@ -43,8 +43,8 @@ subscriptions in [ADR 010](./docs/adr/010-container-resilience-and-dynamic-confi
 | Storage    | Disk-based project asset storage under `STORAGE_DATA_DIR` (`storage_data/`) with per-tier quota enforcement |
 | Passwords  | scrypt (Node crypto), secrets encrypted with AES-256-GCM                   |
 | Cultures   | `fa-IR` (default, RTL, Shamsi, Persian digits) and `en-US` — see ADR 008 |
-| AI / MCP   | Model Context Protocol (Spec 2024-11-05), JSON-RPC 2.0 (`/api/mcp`), stdio bridge (`bin/mcp-server.mjs`), Agent Skill (`/skills/localme/SKILL.md`) |
-| Tooling    | Bun & Node.js 22+, ESLint 9 (flat config), Vitest (341 tests), GitHub Actions |
+| AI / Deploy | Standard Project ZIP bundle (`localme.json` + `codebase/`), Agent Skill (`/skills/localme/SKILL.md`) |
+| Tooling    | Node.js 22+, ESLint 9 (flat config), Vitest, GitHub Actions |
 
 No server-side user code is ever executed. A project is static assets plus calls to the documented
 platform API.
@@ -54,27 +54,27 @@ platform API.
 ## Getting started
 
 ```bash
-bun install        # install dependencies
-bun run dev        # Next.js dev server on 0.0.0.0:$PORT
+npm install        # install dependencies
+npm run dev        # Next.js dev server on 0.0.0.0:$PORT
 ```
 
 Everything at once — install, verify, build, run:
 
 ```bash
-bun install && bun run typecheck && bun run lint && bun run test && bun run build && bun run start
+npm install && npm run typecheck && npm run lint && npm test && npm run build && npm start
 ```
 
 Local dev needs **no database service**: the default dialect is in-memory SQLite,
 and the in-memory database is migrated automatically on first connection, so
-`bun run dev` works from a clean checkout.
+`npm run dev` works from a clean checkout.
 
 ```bash
-bun run db:migrate                 # only needed for a file-backed DB (DB_PATH) or Postgres
-DB_DRIVER=postgres bun run db:migrate   # Postgres, via DATABASE_URL
-bun run test                       # data-layer + crypto + platform tests on SQLite
-bun run test:postgres              # data-layer tests on Postgres (needs DATABASE_URL)
-bun run seed                       # demo accounts and projects (see below)
-bun run backup -- --help           # snapshot / verify / restore the database
+npm run db:migrate                 # only needed for a file-backed DB (DB_PATH) or Postgres
+DB_DRIVER=postgres npm run db:migrate   # Postgres, via DATABASE_URL
+npm test                           # data-layer + crypto + platform tests on SQLite
+npm run test:postgres              # data-layer tests on Postgres (needs DATABASE_URL)
+npm run seed                       # demo accounts and projects (see below)
+npm run backup -- --help           # snapshot / verify / restore the database
 ```
 
 Environment variables (see [`env.example`](./env.example)):
@@ -136,20 +136,20 @@ inert while the markup looks perfect. `next.config.ts` allowlists `localhost`,
 serve the dev server from through `ALLOWED_DEV_ORIGINS` (wildcards allowed):
 
 ```bash
-ALLOWED_DEV_ORIGINS="*.example.com,tunnel.localhost" bun run dev
+ALLOWED_DEV_ORIGINS="*.example.com,tunnel.localhost" npm run dev
 ```
 
-`next build` / `next start` serve no dev resources, so this only affects `bun run dev`.
+`next build` / `next start` serve no dev resources, so this only affects `npm run dev`.
 
 ## Demo data
 
-`bun run seed` fills a development database with something to click through: five
+`npm run seed` fills a development database with something to click through: five
 accounts, six projects, documents, files, domains, webhooks, API keys and two months
 of visit analytics.
 
 ```bash
-bun run seed                 # idempotent — an existing account is left alone
-bun run seed -- --reset      # delete the demo accounts first, then recreate
+npm run seed                 # idempotent — an existing account is left alone
+npm run seed -- --reset      # delete the demo accounts first, then recreate
 ```
 
 All five accounts share the password **`demopassword`**:
@@ -249,7 +249,7 @@ scripts/        Migration runner, demo seeder and the backup tool
 
 The suite always runs against its own in-memory SQLite. `tests/setup-env.ts` clears
 `DB_PATH`/`DATABASE_URL` before any test module loads, because `.env.local` is present
-in every shell — without it `bun run test` opens the developer's own database, and a
+in every shell — without it `npm test` opens the developer's own database, and a
 cleanup in a test file deletes it. The Postgres leg sets `DB_DRIVER=postgres` itself
 and is left alone.
 
@@ -284,20 +284,16 @@ and is left alone.
   operator console (`/admin`) for platform stats, projects, accounts, global cron switches,
   the public library and system configuration.
 - Structured NDJSON logging with credential redaction (`logging.*`), a webhook outbox, and
-  `bun run backup` for `pg_dump`/`VACUUM INTO` snapshots with verification, restore and retention.
+  `npm run backup` for `pg_dump`/`VACUUM INTO` snapshots with verification, restore and retention.
 
-## Autonomous AI Agents & Model Context Protocol (MCP)
-
-LocalMe natively supports autonomous AI coding assistants (Antigravity, Cursor, Claude Desktop, ChatGPT, etc.) via the official **Model Context Protocol (spec 2024-11-05)**:
-
-- **JSON-RPC 2.0 Endpoint**: `/api/mcp` implements protocol initialization, capability negotiation, ping, and logging level selection.
-- **Tools**: 16 native tools for account info, projects, static files, route rewrites, proxy mounts, JSON document databases, and encrypted secrets.
-- **Prompts**: Built-in workflows for `deploy-static-site`, `manage-document-db`, and `configure-reverse-proxy`.
-- **Resources & Templates**: Real-time state (`localme://system/overview`, `localme://system/routes`, `localme://system/stats`) and parameterized documentation (`localme://docs/{topic}`).
-- **Desktop Stdio Bridge**: `bin/mcp-server.mjs` provides a stdio bridge for local agent environments.
-- **Agent Access Tokens (AAT)**: Ephemeral tokens (`aat_...`) requested via `POST /api/agent/request-aat` with mandatory human consent UI at `/auth/consent`. Cached locally in `localme-aat.txt`.
-- **Plain-Text Agent Skill**: Served at [`/skills/localme/SKILL.md`](./skills/localme/SKILL.md) with `content-type: text/plain; charset=utf-8`.
-- **Instant Live E2E Testing**: Every uploaded project is immediately live on `https://localme.ir/{username}/{project}/`. AI agents can run automated E2E tests against live URLs with a 5–10s cache grace period.
+## AI Models & ZIP Project Deployment
+ 
+LocalMe is designed so users can chat with any AI model (ChatGPT, Claude, Cursor, Antigravity, etc.) to design and build web apps with zero backend maintenance:
+ 
+- **Standard ZIP Deployment**: The AI packages applications into a standard ZIP bundle containing `localme.json` (platform configuration) at the root and a `codebase/` folder with static files.
+- **Deploy via API or Dashboard**: Projects can be deployed through the web dashboard or via `POST /api/projects/deploy` (multipart/form-data with `file`).
+- **Plain-Text Agent Skill**: Served at [`/skills/localme/SKILL.md`](./skills/localme/SKILL.md) with `content-type: text/plain; charset=utf-8` as the complete prompt and developer reference for AI models.
+- **Instant Live Serving**: Uploaded projects are immediately live at `https://localme.ir/{username}/{project}/`.
 
 ## HTTP API
 
@@ -311,21 +307,21 @@ or `X-API-Key: <API key>`. A route can gate on a visitor role, a single §5.5 pe
 CI (`.github/workflows/ci.yml`) runs on every PR and on `main`:
 
 ```bash
-bun run typecheck       # tsc --noEmit
-bun run lint            # eslint (flat config, next/core-web-vitals + typescript)
-bun run test            # vitest on in-memory SQLite (341 tests across 28 suites)
-bun run test:postgres   # vitest on a real Postgres (CI service container)
-bun run build           # next build
+npm run typecheck       # tsc --noEmit
+npm run lint            # eslint (flat config, next/core-web-vitals + typescript)
+npm test                # vitest on in-memory SQLite (341 tests across 28 suites)
+npm run test:postgres   # vitest on a real Postgres (CI service container)
+npm run build           # next build
 ```
 
 The document-store contract in `tests/db/document-store.contract.ts` runs on **both** dialects,
-so SQLite and Postgres cannot drift; `bun run test:postgres` additionally asserts that the
+so SQLite and Postgres cannot drift; `npm run test:postgres` additionally asserts that the
 `schema_migrations` ledger lists every file in `db/postgres/`. Locally it needs a reachable
 server:
 
 ```bash
-DB_DRIVER=postgres DATABASE_URL=postgresql://user:pass@localhost:5432/localme bun run db:migrate
-DB_DRIVER=postgres DATABASE_URL=postgresql://user:pass@localhost:5432/localme bun run test:postgres
+DB_DRIVER=postgres DATABASE_URL=postgresql://user:pass@localhost:5432/localme npm run db:migrate
+DB_DRIVER=postgres DATABASE_URL=postgresql://user:pass@localhost:5432/localme npm run test:postgres
 ```
 
 ## Production & Container Deployment
@@ -360,31 +356,31 @@ Both the SQLite database and all project file uploads coexist on the same 2GB pe
 ### One-liner (Local or Bare-Metal)
 
 ```bash
-bun install && bun run typecheck && bun run lint && bun run test && bun run build && bun run start
+npm install && npm run typecheck && npm run lint && npm test && npm run build && npm start
 ```
 
 | Script | What it does |
 | :----- | :----------- |
-| `bun run dev` | dev server on `0.0.0.0:$PORT` |
-| `bun run test` | 341 tests on in-memory SQLite (28 suites) |
-| `bun run test:postgres` | the dialect contract on Postgres (needs `DATABASE_URL`) |
-| `bun run lint` | ESLint (flat config) |
-| `bun run typecheck` | `tsc --noEmit` |
-| `bun run build` | production build |
-| `bun run start` | serve the production build |
+| `npm run dev` | dev server on `0.0.0.0:$PORT` |
+| `npm test` | 341 tests on in-memory SQLite (28 suites) |
+| `npm run test:postgres` | the dialect contract on Postgres (needs `DATABASE_URL`) |
+| `npm run lint` | ESLint (flat config) |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm run build` | production build |
+| `npm start` | serve the production build |
 | `npm run runflare:start` | smart container startup with auto-migrations and instant port binding |
-| `bun run db:migrate` | apply `db/*/**.sql` to a file-backed SQLite DB or Postgres |
-| `bun run seed` | demo accounts/projects (`-- --reset` to rebuild them) |
-| `bun run backup` | snapshot / verify / restore |
+| `npm run db:migrate` | apply `db/*/**.sql` to a file-backed SQLite DB or Postgres |
+| `npm run seed` | demo accounts/projects (`-- --reset` to rebuild them) |
+| `npm run backup` | snapshot / verify / restore |
 
 ## Backups
 
 ```bash
-bun run backup                       # snapshot + prune past --retention-days (30)
-bun run backup -- --list             # what is on disk
-bun run backup -- --verify <file>    # sanity-check an archive before trusting it
-bun run backup -- --restore <file>   # load a snapshot back
-bun run backup -- --dir /mnt/backups --db file:/var/lib/localme/localme.db
+npm run backup                       # snapshot + prune past --retention-days (30)
+npm run backup -- --list             # what is on disk
+npm run backup -- --verify <file>    # sanity-check an archive before trusting it
+npm run backup -- --restore <file>   # load a snapshot back
+npm run backup -- --dir /mnt/backups --db file:/var/lib/localme/localme.db
 ```
 
 The script picks the method from the active driver: `pg_dump` for Postgres (the connection

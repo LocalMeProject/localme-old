@@ -49,7 +49,7 @@ What the platform does *not* promise:
 | AI Agent Governance | Ephemeral Agent Access Tokens (`aat_...`) require explicit human consent via the browser consent screen (`/auth/consent`). Tokens have a short TTL (4h–48h), are cached locally in `localme-aat.txt`, and cannot be auto-renewed without human confirmation. |
 | Identity Immutability | Usernames and phone numbers are strictly immutable on user profiles (`/profile`), ensuring that audit logs, project URL mounts, and authorization records cannot be hijacked by renaming accounts. |
 | Secrets in logs | Field names are matched segment-wise against a sensitive list, JWT-shaped values are redacted regardless of key, and long values are truncated. Logs are newline-delimited JSON. |
-| Backups | `bun run backup` reads the connection string from the environment, never from argv, so it does not leak into the process list. |
+| Backups | `npm run backup` reads the connection string from the environment, never from argv, so it does not leak into the process list. |
 
 ## Deploying safely
 
@@ -74,5 +74,5 @@ What the platform does *not* promise:
   new deployment cannot burn production CA rate limits.
 - Terminate TLS in front of the app. The HSTS header is only meaningful over
   HTTPS.
-- Back up on a schedule and **test the restore**. `bun run backup -- --verify`
+- Back up on a schedule and **test the restore**. `npm run backup -- --verify`
   checks an archive; `--restore` is the only proof that matters.

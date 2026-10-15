@@ -69,14 +69,14 @@ describe("skills route handler", () => {
   });
 });
 
-describe("captcha numbers cap enhancement", () => {
-  it("generates captcha with sums above 20 up to ~99", () => {
+describe("captcha numbers under 20", () => {
+  it("generates captcha where operands and answers are strictly lower than 20", () => {
     for (let i = 0; i < 20; i++) {
       const challenge = createCaptchaChallenge();
       const answer = Number(challenge.id.split(".")[1]);
-      // Verify sum is >= 25 and <= 99
-      expect(answer).toBeGreaterThanOrEqual(25);
-      expect(answer).toBeLessThanOrEqual(99);
+      // Verify sum is strictly < 20 and >= 2
+      expect(answer).toBeGreaterThanOrEqual(2);
+      expect(answer).toBeLessThan(20);
       expect(verifyCaptcha(challenge.id, String(answer))).toBe(true);
       expect(challenge.svg).toContain("= ?");
     }

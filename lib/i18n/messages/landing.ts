@@ -638,7 +638,7 @@ export const landing = {
   "landing.footer.health": { "en-US": "Health endpoint", "fa-IR": "نقطهٔ سلامت سرویس" },
   "landing.footer.hostedApps": { "en-US": "Hosted apps", "fa-IR": "اپلیکیشن‌های میزبانی‌شده" },
   "landing.footer.policy": { "en-US": "Terms & Policy", "fa-IR": "قوانین و حریم خصوصی" },
-  "landing.footer.skillMcp": { "en-US": "Agent Skill & MCP", "fa-IR": "اسکیل و سرور MCP" },
+  "landing.footer.skillMcp": { "en-US": "Agent Skill & Deploy", "fa-IR": "اسکیل و راهنمای انتشار" },
   "landing.footer.singleDeployment": {
     "en-US": "Single deployment, every project",
     "fa-IR": "یک دیپلوی، برای همهٔ پروژه‌ها",
@@ -767,37 +767,37 @@ export const landing = {
   },
   "landing.story.body": {
     "en-US":
-      "You don't need to write backend code, configure SQL databases, or configure servers. You give your AI agent a single prompt pointing to our Skill and MCP server — the agent builds and ships it all.",
+      "You don't need to write backend code, configure SQL databases, or configure servers. You give your AI model a prompt pointing to our Skill — it builds the frontend app and packages it into a LocalMe ZIP file for instant deployment.",
     "fa-IR":
-      "اصلا لازم نیست کد بک‌اند بنویسی یا سرور و دیتابیس راه بیندازی. فقط یک پیام به هوش مصنوعی میدهی و اسکیل و سرور MCP لوکال می را معرفی میکنی؛ ایجنت همه چیز را میسازد و منتشر میکند.",
+      "اصلا لازم نیست کد بک‌اند بنویسی یا سرور و دیتابیس راه بیندازی. فقط به هوش مصنوعی میگویی و اسکیل لوکال می را معرفی میکنی؛ مدل فرانت‌اند را میسازد و در قالب فایل ZIP لوکال می تحویل میدهد تا فورا منتشر شود.",
   },
-  "landing.story.step1.title": { "en-US": "1. Prompt your AI Agent", "fa-IR": "۱. به هوش مصنوعی میگویی" },
+  "landing.story.step1.title": { "en-US": "1. Prompt your AI Assistant", "fa-IR": "۱. به هوش مصنوعی میگویی" },
   "landing.story.step1.body": {
     "en-US":
-      "Tell Claude, Cursor, ChatGPT, or Antigravity what you need and point it to the LocalMe Skill at https://localme.ir/skills/localme/SKILL.md.",
+      "Tell Claude, Cursor, ChatGPT, or any LLM what you need and point it to the LocalMe Skill at https://localme.ir/skills/localme/SKILL.md.",
     "fa-IR":
-      "به کلود، کرسر، چت‌جی‌پی‌تی یا هر ایجنتی که داری میگویی سایت قنادی میخواهی و آدرس اسکیل لوکال می (https://localme.ir/skills/localme/SKILL.md) را به آن میدهی.",
+      "به کلود، کرسر، چت‌جی‌پی‌تی یا هر مدلی که استفاده میکنی میگویی چه سایتی میخواهی و آدرس اسکیل لوکال می (https://localme.ir/skills/localme/SKILL.md) را به آن میدهی.",
   },
-  "landing.story.step2.title": { "en-US": "2. Confirm Access with One Click", "fa-IR": "۲. با یک کلیک تایید میکنی" },
+  "landing.story.step2.title": { "en-US": "2. AI Generates the Application", "fa-IR": "۲. هوش مصنوعی برنامه را میسازد" },
   "landing.story.step2.body": {
     "en-US":
-      "The agent requests a temporary Agent Access Token (AAT). You approve it in your browser with one click — no API keys to copy or expose.",
+      "The AI writes the frontend code with calls to LocalMe's embedded document database and storage APIs, then prepares localme.json with routing and configuration.",
     "fa-IR":
-      "ایجنت دسترسی موقت (AAT) درخواست میکند. صفحه تایید در مرورگرت باز میشود و با یک کلیک تاییدش میکنی؛ بدون هیچ کپی کردن کلید یا نگرانی امنیتی.",
+      "هوش مصنوعی کد فرانت‌اند را با اتصال به دیتابیس سندی و فایل‌های لوکال می مینویسد و فایل تنظیمات localme.json را آماده میکند.",
   },
-  "landing.story.step3.title": { "en-US": "3. Agent Deploys via MCP", "fa-IR": "۳. ایجنت با MCP منتشر میکند" },
+  "landing.story.step3.title": { "en-US": "3. Package as LocalMe ZIP", "fa-IR": "۳. دریافت بسته ZIP پروژه" },
   "landing.story.step3.body": {
     "en-US":
-      "Your agent creates the project, provisions database tables, and uploads the responsive ordering app straight to LocalMe through the MCP server.",
+      "Your assistant packages the project into a standard ZIP bundle (localme.json at root and codebase/ directory). Upload it via dashboard or API to go live instantly.",
     "fa-IR":
-      "ایجنت پروژه را از طریق سرور MCP لوکال می میسازد، جداول دیتابیس سفارش‌ها را ایجاد میکند و فایل‌های سایت را مستقیما بارگذاری میکند.",
+      "دستیار پروژه را در قالب یک فایل ZIP استاندارد با localme.json در ریشه و پوشه codebase/ تحویل میدهد. با بارگذاری در داشبورد یا API سایتت فورا فعال میشود.",
   },
-  "landing.story.step4.title": { "en-US": "4. Live Website & Real-Time Orders", "fa-IR": "۴. سایت زنده و دریافت سفارش‌ها" },
+  "landing.story.step4.title": { "en-US": "4. Live Website & Real-Time Orders", "fa-IR": "۴. سایت زنده و دریافت داده‌ها" },
   "landing.story.step4.body": {
     "en-US":
-      "Customers open cakeshop.localme.ir on their phones and place orders. You see every order land live in your dashboard — ready for business.",
+      "Customers open your site on their phones and interact with it. You see every visitor and document land live in your dashboard — ready for business.",
     "fa-IR":
-      "سایتت بلافاصله آنلاین است. مشتری‌ها با گوشی سفارش میدهند و تمام سفارش‌ها را همان لحظه در پیشخوانت میبینی.",
+      "سایتت بلافاصله آنلاین است. کاربران وارد سایت میشوند و تمام رکوردها و اطلاعات را همان لحظه در پیشخوانت میبینی.",
   },
   "landing.story.cta": {
     "en-US": "Try it with your AI assistant today",
@@ -808,12 +808,12 @@ export const landing = {
     "fa-IR": "از ایده تا سایت واقعی: دستور یک‌خطی به هوش مصنوعی",
   },
   "landing.prompt.subtitle": {
-    "en-US": "Copy and paste this prompt directly into Claude Code, Cursor, ChatGPT, or Antigravity:",
+    "en-US": "Copy and paste this prompt directly into Claude, Cursor, ChatGPT, or any AI assistant:",
     "fa-IR": "این متن را کپی کن و به کلود، کرسر، چت‌جی‌پی‌تی یا هر مدل هوش مصنوعی بده:",
   },
   "landing.prompt.text": {
-    "en-US": "Create a modern, mobile-friendly cake shop web app with a cake catalog, customer phone and address ordering form, and an orders list. Deploy it to my LocalMe account using the Skill at https://localme.ir/skills/localme/SKILL.md and MCP server at https://localme.ir/api/mcp.",
-    "fa-IR": "یک وب‌اپلیکیشن شیک و مناسب موبایل برای قنادی من بساز با کاتالوگ کیک‌ها، فرم نام و شماره و آدرس مشتری برای ثبت سفارش، و صفحه مدیریت سفارش‌ها. سپس با استفاده از اسکیل لوکال می در https://localme.ir/skills/localme/SKILL.md و سرور MCP در https://localme.ir/api/mcp آن را در حساب لوکال می من منتشر کن.",
+    "en-US": "Create a modern, mobile-friendly cake shop web app with a cake catalog, customer phone and address ordering form, and an orders list. Package it as a LocalMe ZIP bundle with localme.json and codebase/ using the Skill instructions at https://localme.ir/skills/localme/SKILL.md.",
+    "fa-IR": "یک وب‌اپلیکیشن شیک و مناسب موبایل برای قنادی من بساز با کاتالوگ کیک‌ها، فرم نام و شماره و آدرس مشتری برای ثبت سفارش، و صفحه مدیریت سفارش‌ها. سپس آن را در قالب یک فایل ZIP با localme.json و پوشه codebase/ بر اساس راهنمای اسکیل https://localme.ir/skills/localme/SKILL.md آماده کن.",
   },
   "landing.prompt.copy": { "en-US": "Copy Prompt", "fa-IR": "کپی دستور" },
   "landing.prompt.copied": { "en-US": "Copied to Clipboard!", "fa-IR": "دستور کپی شد!" },

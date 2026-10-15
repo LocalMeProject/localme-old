@@ -13,7 +13,7 @@
  *   seeder twice does not double every project. `--reset` is explicit and
  *   destructive.
  * - **Never in production.** `seedDemoData` refuses unless the caller passes
- *   `allowProduction`, which only `bun run seed` does, and only after checking
+ *   `allowProduction`, which only `npm run seed` does, and only after checking
  *   `NODE_ENV`. Demo accounts have a known password; that must never be true of
  *   a deployment someone is using.
  *
@@ -158,7 +158,7 @@ async function writeProjectFiles(
     await write("static/app.css", APP_CSS);
     await write("static/app.js", APP_JS);
     await write("static/logo.svg", `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#4f6bed"/><path d="M9 22V10h4l3 6 3-6h4v12" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/></svg>\n`);
-    await write("data/seed.json", `${JSON.stringify({ seededBy: "bun run seed", rows: ORDERS.length }, null, 2)}\n`);
+    await write("data/seed.json", `${JSON.stringify({ seededBy: "npm run seed", rows: ORDERS.length }, null, 2)}\n`);
   } else if (kind === "blog") {
     await write("index.html", blogHtml());
     await write("assets/blog.css", BLOG_CSS);

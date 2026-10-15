@@ -19,11 +19,11 @@ The platform includes a built-in backup CLI to snapshot and restore data. It saf
 ## Commands
 
 ```bash
-bun run backup                       # Snapshot and prune past retention limit (30 days)
-bun run backup -- --list             # List available backups on disk
-bun run backup -- --verify <file>    # Verify the integrity of a snapshot archive
-bun run backup -- --restore <file>   # Restore a snapshot to the database
-bun run backup -- --dir /mnt/backups --db file:/var/lib/localme/localme.db
+npm run backup                       # Snapshot and prune past retention limit (30 days)
+npm run backup -- --list             # List available backups on disk
+npm run backup -- --verify <file>    # Verify the integrity of a snapshot archive
+npm run backup -- --restore <file>   # Restore a snapshot to the database
+npm run backup -- --dir /mnt/backups --db file:/var/lib/localme/localme.db
 ```
 
 Backups are designed to be run manually or triggered via systemd/cron jobs externally.

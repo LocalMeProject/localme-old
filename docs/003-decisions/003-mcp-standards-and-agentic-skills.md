@@ -7,11 +7,19 @@ kind: decision
 date: 2026-10-01
 deciders: [architecture-team]
 ---
-# ADR 009 — Standards-Compliant Model Context Protocol (MCP 2024-11-05), Agent Access Tokens (AAT) and Autonomous Agent Governance
+# ADR 009 — Transition from MCP Connection to Standard AI ZIP Bundle Deployment
 
-- Status: accepted
-- Date: 2026-10-04
+- Status: revised (2026-10-11: MCP server dropped; replaced by AI-generated ZIP bundles `localme.json` + `codebase/`)
+- Date: 2026-10-04 (revised 2026-10-11)
 - Refines: §1, §7 (auth), §13 (routing/serving), and all developer/LLM interfaces.
+
+## Revision Context (2026-10-11)
+
+Deploying and maintaining an MCP server connector for non-technical users chatting with online AI services (many on free tiers without custom MCP support) introduced significant friction and overhead. The architecture was simplified:
+- Dropped `/api/mcp` and `bin/mcp-server.mjs`.
+- AI models now act as application builders, generating static code in `codebase/` and configuration in `localme.json`, packaged as a standard ZIP file.
+- Deployment is executed via web upload in the dashboard or `POST /api/projects/deploy`.
+- Plain-text Agent Skill (`/skills/localme/SKILL.md`) serves as the comprehensive schema and API contract for AI models.
 
 ## Context
 

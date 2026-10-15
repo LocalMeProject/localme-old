@@ -47,6 +47,7 @@ export async function buildProjectExport(projectId: number, projectName: string)
   for (const file of files) {
     const found = await getFileBlob(projectId, file.path);
     if (!found) continue;
+    entries.push({ path: `codebase/${file.path}`, content: found.content });
     entries.push({ path: `storage/${file.path}`, content: found.content });
   }
 
@@ -93,12 +94,29 @@ export async function buildProjectExport(projectId: number, projectName: string)
     secret: (row.secret as string | null) ?? null,
   }));
 
+  const localmeConfig = {
+    name: projectName,
+    settings: {
+      watermarkEnabled: project ? bool(project.watermarkEnabled) : true,
+    },
+    routes: config.routes,
+    roles: config.roles,
+    secrets: Object.fromEntries(secrets.map((s) => [s.key, s.value])),
+    automations: {
+      webhooks: config.webhooks,
+      cron: config.cron,
+    },
+    domains: config.dns,
+    endpoints: config.api,
+  };
+
+  entries.push({ path: "localme.json", content: Buffer.from(`${JSON.stringify(localmeConfig, null, 2)}\n`, "utf8") });
   entries.push({ path: "config/secrets.json", content: Buffer.from(`${JSON.stringify(secrets, null, 2)}\n`, "utf8") });
   entries.push({ path: "config/config.json", content: Buffer.from(`${JSON.stringify(config, null, 2)}\n`, "utf8") });
   entries.push({
     path: "README.txt",
     content: Buffer.from(
-      `LocalMe backup of project "${projectName}" (id ${projectId}).\n\nstorage/  project files\nlib/      library assets\nconfig/config.json    routes, api, roles, cron, webhooks, dns, auth\nconfig/secrets.json   secret values in clear text — keep this archive private\n\nRestore with: POST /api/import/all (multipart field "file").\n`,
+      `LocalMe backup of project "${projectName}" (id ${projectId}).\n\nlocalme.json  Platform configuration (routes, roles, secrets, automations, settings)\ncodebase/     Frontend project assets (HTML, CSS, JS)\nstorage/      Legacy storage alias\nlibrary/      Shared library assets\nconfig/       Legacy configuration directory\n\nDeploy/Restore with: POST /api/projects/deploy or POST /api/import/all.\n`,
       "utf8",
     ),
   });

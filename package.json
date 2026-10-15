@@ -15,8 +15,7 @@
     "test:watch": "vitest",
     "db:migrate": "node scripts/migrate.mjs",
     "backup": "node scripts/backup.mjs",
-    "seed": "bun run seed:build && node .seed-build/seed.cjs",
-    "seed:build": "bun build scripts/seed-demo.ts --target=node --format=cjs --outfile=.seed-build/seed.cjs --log-level=error"
+    "seed": "node ./node_modules/vite-node/vite-node.mjs --config vitest.config.ts scripts/seed-demo.ts"
   },
   "dependencies": {
     "@noble/ciphers": "^2.4.0",

@@ -42,15 +42,13 @@ This document is the internal development guide for the LocalMe platform enginee
 
 | Component | Version | Installation |
 | :--- | :--- | :--- |
-| **Bun** | 1.x | `curl -fsSL https://bun.sh/install | bash` |
-| **Node.js** | 22.x LTS (what Bun and Next.js run on) | `curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -` |
+| **Node.js** | 22.x LTS | `curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -` |
 | **PostgreSQL** | 18.4 — *optional*, production path only | `sudo apt install postgresql-18` |
 | **Git** | 2.43+ | `sudo apt install git` |
 | **IDE** | VS Code | — |
 | **Docker** | Latest (optional) | `sudo apt install docker.io docker-compose` |
 
-There is **no .NET SDK** and no separate backend to run. `npm`/`pnpm` also work;
-`bun` is what CI and the scripts in `package.json` assume.
+There is **no .NET SDK** and no separate backend to run. `npm` is what CI and the scripts in `package.json` assume.
 
 ### 2.2 Clone & Initial Setup
 
@@ -106,8 +104,8 @@ key is derived from `SESSION_SECRET` with scrypt.
 ### 2.4 Run Locally
 
 ```bash
-bun install
-bun run dev          # Next.js dev server, binds 0.0.0.0:$PORT (default 3000)
+npm install
+npm run dev          # Next.js dev server, binds 0.0.0.0:$PORT (default 3000)
 ```
 
 Nothing else to start. With the default in-memory SQLite the schema is migrated
@@ -115,14 +113,14 @@ automatically on first connection, so a clean checkout runs immediately. A
 file-backed SQLite database or Postgres needs one explicit migration first:
 
 ```bash
-bun run db:migrate
-DB_DRIVER=postgres DATABASE_URL=postgresql://... bun run db:migrate
+npm run db:migrate
+DB_DRIVER=postgres DATABASE_URL=postgresql://... npm run db:migrate
 ```
 
 Everything at once — install, verify, build, run:
 
 ```bash
-bun install && bun run typecheck && bun run lint && bun run test && bun run build && bun run start
+npm install && npm run typecheck && npm run lint && npm test && npm run build && npm start
 ```
 
 ---
